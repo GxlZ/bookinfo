@@ -1,0 +1,38 @@
+// In general, while you can use proto2 (the current default protocol buffers
+// version), we recommend that you use proto3 with gRPC as it lets you use the
+// full range of gRPC-supported languages, as well as avoiding compatibility
+// issues with proto2 clients talking to proto3 servers and vice versa.
+syntax = "proto3";
+
+// The package name determines the name of the directories that truss creates
+// for `package echo;` truss will create the directory "echo-service".
+package details;
+
+import "github.com/tuneinc/truss/deftree/googlethirdparty/annotations.proto";
+import "bookinfo/pb/comments/comments.proto";
+
+service BookDetails {
+    // Echo "echos" the incoming string
+    rpc Detail (DetailReq) returns (DetailResp) {
+        option (google.api.http) = {
+          get: "/v1/detail"
+        };
+    }
+}
+
+message DetailReq {
+    int64 id = 1;
+}
+
+message DetailResp {
+    int32 code = 1;
+    string msg = 2;
+    DetailRespData data = 3;
+}
+
+message DetailRespData {
+    int32 id = 1; //ID
+    string name = 2; //书名
+    string intro = 3; //简介
+    repeated comments.Comment comments = 4;
+}

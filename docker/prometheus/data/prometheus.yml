@@ -1,0 +1,29 @@
+global:
+  scrape_interval: 1s
+  external_labels:
+    monitor: 'codelab-monitor'
+scrape_configs:
+  - job_name: prometheus
+    scrape_interval: 5s
+    scrape_timeout: 2s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+    - targets:
+      - localhost:9090
+  - job_name: books-details
+    scrape_interval: 2s
+    scrape_timeout: 1s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+    - targets:
+      - books-details:5004
+  - job_name: books-comments
+    scrape_interval: 2s
+    scrape_timeout: 1s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+    - targets:
+      - books-comments:5014

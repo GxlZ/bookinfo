@@ -1,0 +1,26 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+server:
+  status: false
+  open: false
+  port: 0
+  host: ""
+schema:
+- name: bookcomments-service
+  path: ./cmd/bookcomments-server
+  commands:
+    install:
+      status: true
+    run:
+      status: true
+  watcher:
+    paths:
+    - ../../
+    extensions:
+    - go
+    ignored_paths:
+    - .git
+    - .realize
+    - vendor

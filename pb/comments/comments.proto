@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package comments;
+
+import "github.com/tuneinc/truss/deftree/googlethirdparty/annotations.proto";
+
+service BookComments {
+    rpc Post (PostReq) returns (PostResp) {
+        option (google.api.http) = {
+          post: "/v1/post"
+          body: "*"
+        };
+    }
+
+    rpc Get (GetReq) returns (GetResp) {
+        option (google.api.http) = {
+          get: "/v1/get"
+        };
+    }
+}
+
+message PostReq {
+    int64 id = 1;
+    string content = 2;
+}
+
+message PostResp {
+    int32 code = 1;
+    string msg = 2;
+}
+
+message GetReq {
+    int64 id = 1;
+}
+
+message GetResp {
+    int32 code = 1;
+    string msg = 2;
+    repeated Comment data = 3;
+}
+
+message Comment {
+    string content = 1;
+    string createdAt = 2;
+}
+

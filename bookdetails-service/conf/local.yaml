@@ -1,0 +1,36 @@
+service_name: book-details
+db_book:
+  username: root
+  password: root
+  host: 127.0.0.1
+  port: 3406
+  db_name: bookinfo
+  driver: mysql
+  charset: utf8
+  parse_time: True
+  local: Local
+  conn_max_life_time: 3600
+  max_idle_conns: 10
+  max_open_conns: 1000
+redis:
+  addr: "127.0.0.1:6973"
+  password: ""
+  db: 0
+zipkin:
+  url: http://localhost:9411
+  service_name: book-details
+  reporter:
+    timeout: 5
+    batch_size: 1000
+    batch_interval: 3
+http_server:
+  addr: :5001
+grpc_server:
+  addr: :5002
+debug_server:
+  addr: :5003
+metrics_server:
+  addr: :5004
+servers:
+  book_comments:
+    grpc: localhost:5012

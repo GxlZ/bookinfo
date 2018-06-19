@@ -1,0 +1,73 @@
+version: '2'
+services:
+  mysql.server:
+    image: mysql:5.6
+    ports:
+      - 3406:3306/tcp
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bookinfo
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_bin
+
+  promethrus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090/tcp
+    volumes:
+      - $GOPATH/src/bookinfo/docker/prometheus/data:/prometheus-data
+    command: --config.file=/prometheus-data/prometheus.yml
+
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411/tcp
+
+  books-details:
+    image: gxlz/golang:1.10.3-apline3.7
+    ports:
+      - 5001:5001
+      - 5002:5002
+      - 5003:5003
+      - 5004:5004
+      - 5005:5005
+    volumes:
+      - $GOPATH/src/bookinfo:/go/src/bookinfo
+    depends_on:
+      - mysql.server
+      - promethrus
+      - zipkin
+    entrypoint:
+      - ash
+      - -c
+      - |
+        sleep 15 && \
+        cd /go/src/bookinfo/bookdetails-service && \
+        echo "RUN_MODE: container" > .env && \
+        echo "MIGRATE: yes" >> .env && \
+        realize start
+
+  books-comments:
+    image: gxlz/golang:1.10.3-apline3.7
+    ports:
+      - 5011:5011/tcp
+      - 5012:5012/tcp
+      - 5013:5013/tcp
+      - 5014:5014/tcp
+      - 5015:5015/tcp
+    volumes:
+      - $GOPATH/src/bookinfo:/go/src/bookinfo
+    depends_on:
+      - mysql.server
+      - promethrus
+      - zipkin
+    entrypoint:
+      - ash
+      - -c
+      - |
+        sleep 15 && \
+        cd /go/src/bookinfo/bookcomments-service && \
+        echo "RUN_MODE: container" > .env && \
+        echo "MIGRATE: yes" >> .env && \
+        realize start

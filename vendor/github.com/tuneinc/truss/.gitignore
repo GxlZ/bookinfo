@@ -1,0 +1,14 @@
+## vim
+# swap
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+# session
+Session.vi
+
+# generated example services
+_example/*
+!_example/echo.proto
+
+# Prevents accidentally including a problematic folder within the `vendor/`
+# folder.
+vendor/github.com/Sirupsen/logrus/examples/
