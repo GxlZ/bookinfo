@@ -138,14 +138,13 @@ $ curl "http://localhost:5011/v1/get?id=1"
 $ cat $GOPATH/src/bookinfo/bookdetails-server/runtime/pid | xargs kill -s SIGINT
 ```
 
-## 监控
-> prometheus 
+## prometheus监控 
 ```bash
 $ open http://127.0.0.1:9090
 ```
 <img src="_assets/prometheus.png" />
 
-> zipkin trace
+## zipkin调用链路跟踪
 ```bash
 $ open http://127.0.0.1:9411
 ```
