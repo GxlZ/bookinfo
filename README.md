@@ -104,13 +104,17 @@ $ docker-compose -f docker/docker-compose.yaml up -d
 ```bash
 ### books-details
 # grpc
-$ go run $GOPATH/src/bookinfo/bookdetails-service/cmd/bookdetails/main.go detail -id 1
+$ docker-compose -f docker/docker-compose.yaml \
+  exec books-details \
+  go run /go/src/bookinfo/bookdetails-service/cmd/bookdetails/main.go detail -id 1
 # http
 $ curl "http://localhost:5001/v1/detail?id=1"
 
 ### books-comments
 # grpc
-$ go run $GOPATH/src/bookinfo/bookcomments-service/cmd/bookcomments/main.go detail -id 1
+$ docker-compose -f docker/docker-compose.yaml \
+  exec books-comments \
+  go run /go/src/bookinfo/bookcomments-service/cmd/bookcomments/main.go get -id 1
 # http
 $ curl "http://localhost:5011/v1/get?id=1"
 ```
