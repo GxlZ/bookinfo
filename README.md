@@ -24,7 +24,7 @@ BookInfo 使用golang编写,实现简单的书籍查询服务。
 - [x] env配置文件支持
 - [x] zipkin全链路追踪
 - [x] test demo
-- [ ] benchmark
+- [x] benchmark demo
 
 ## 文件目录结构
 ```
