@@ -14,6 +14,7 @@ func NewZipkinReporter() reporter.Reporter {
 		zipkinhttp.Timeout(time.Duration(Conf.Zipkin.Reporter.Timeout)*time.Second),
 		zipkinhttp.BatchSize(Conf.Zipkin.Reporter.BatchSize),
 		zipkinhttp.BatchInterval(time.Duration(Conf.Zipkin.Reporter.BatchInterval)*time.Second),
+		zipkinhttp.MaxBacklog(Conf.Zipkin.Reporter.MaxBacklog),
 	)
 }
 

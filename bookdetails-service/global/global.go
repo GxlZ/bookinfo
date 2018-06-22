@@ -13,9 +13,9 @@ var zipkinReporter reporter.Reporter
 
 func init() {
 
-	loadConf()
-
 	Logger = newLogger()
+
+	loadConf()
 
 	BOOK_DB = newBookDB()
 

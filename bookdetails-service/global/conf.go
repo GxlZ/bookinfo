@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"github.com/joho/godotenv"
-	"github.com/davecgh/go-spew/spew"
 )
 
 type conf struct {
@@ -44,6 +43,7 @@ type zipkinConf struct {
 		Timeout       int
 		BatchSize     int `yaml:"batch_size"`
 		BatchInterval int `yaml:"batch_interval"`
+		MaxBacklog int `yaml:"max_backlog"`
 	}
 }
 
@@ -106,5 +106,5 @@ func loadConf() {
 		log.Fatalln("conf load failed", err)
 	}
 
-	spew.Dump(Conf)
+	Logger.Info(Conf)
 }

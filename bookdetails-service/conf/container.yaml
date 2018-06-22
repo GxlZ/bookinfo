@@ -23,6 +23,7 @@ zipkin:
     timeout: 5
     batch_size: 1000
     batch_interval: 3
+    max_backlog: 3000
 http_server:
   addr: :5001
 grpc_server:

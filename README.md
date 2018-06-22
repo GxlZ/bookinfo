@@ -23,7 +23,7 @@ BookInfo 使用golang编写,实现简单的书籍查询服务。
 - [x] yaml配置文件支持
 - [x] env配置文件支持
 - [x] zipkin全链路追踪
-- [ ] tests
+- [x] test demo
 - [ ] benchmark
 
 ## 文件目录结构
@@ -193,7 +193,7 @@ $ cd $GOPATH/src/bookinfo
 $ docker-compose -f docker/docker-compose.yaml exec books-details /go/bin/go-torch -t 30 --file "torch.svg" --url http://localhost:5003
 
 # 获取生成的火焰图
-$ containerName=`docker-compose -f docker/docker-compose.yaml ps | grep books-details | awk '{print $1}'`; \
+$ containerName=`docker-compose -f docker/docker-compose.yaml ps books-details | awk '{print $1}'`; \
   docker cp $containerName:/go/torch.svg /tmp && \
   open -a /Applications/Google\ Chrome.app /tmp/torch.svg
 ```
@@ -210,13 +210,34 @@ $ open http://localhost:5003/debug/pprof/trace
 
 ## Test
 ```bash
-TODO
+$ docker-compose -f docker/docker-compose.yaml \
+  exec books-details \
+  go test -v -cover=true ./src/bookinfo/bookdetails-service/...
+  
+--------------------------------------------------------------------------------------
+
+=== RUN   TestBooksDetailsV1Detail
+--- PASS: TestBooksDetailsV1Detail (0.01s)
+PASS
+coverage: 32.0% of statements
+ok  	bookinfo/bookdetails-service/handlers	0.052s	coverage: 32.0% of statements
 ```
 
 ## Benchmark
-
 ```bash
-TODO
+$ docker-compose -f docker/docker-compose.yaml \
+  exec books-details \
+  go test -bench=. -benchtime=30s -benchmem -run=none \
+  ./src/bookinfo/bookdetails-service/handlers/handlers_test.go \
+  ./src/bookinfo/bookdetails-service/handlers/handlers.go
+  
+-------------------------------------------------------------------------------------------------------
+
+goos: linux
+goarch: amd64
+BenchmarkBooksDetailsV1Detail-2   	    5000	   7844925 ns/op	  151718 B/op	     741 allocs/op
+PASS
+ok  	command-line-arguments	40.047s
 ```
 
 ## 服务单独启动

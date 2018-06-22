@@ -9,7 +9,6 @@ import (
 	zipkingo "github.com/openzipkin/zipkin-go"
 	"google.golang.org/grpc"
 	commentspb "bookinfo/pb/comments"
-	"fmt"
 )
 
 // NewService returns a naïve, stateless implementation of Service.
@@ -24,9 +23,6 @@ func (s bookdetailsService) Detail(ctx context.Context, in *pb.DetailReq) (*pb.D
 	//zipkin
 	var newCtx context.Context
 	var zipkinSpan zipkingo.Span
-	//for test
-	fmt.Print(zipkinSpan)
-	//end test
 	{
 		span, ctx, err := global.NewZipkinSpanFromCtx(ctx, func() (*zipkingo.Tracer, error) {
 			return global.NewZipkinTracer()
