@@ -15,7 +15,7 @@ import (
 	pb "bookinfo/pb/details"
 	"bookinfo/bookdetails-service/global"
 
-	_ "github.com/mkevac/debugcharts"
+	//_ "github.com/mkevac/debugcharts"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 

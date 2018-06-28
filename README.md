@@ -185,21 +185,69 @@ $ open http://localhost:5005
 ```
 <img src="_assets/pprof.png" />
 
-> 火焰图
+> cpu火焰图
 ```bash
 $ cd $GOPATH/src/bookinfo
 
 # 采集数据生成火焰图
-$ docker-compose -f docker/docker-compose.yaml exec books-details /go/bin/go-torch -t 30 --file "torch.svg" --url http://localhost:5003
+$ docker-compose -f docker/docker-compose.yaml \
+  exec books-details \
+  /go/bin/go-torch \
+  -t 30 \
+  --file "torch.svg" \
+  --url http://localhost:5003
 
 # 获取生成的火焰图
-$ containerName=`docker-compose -f docker/docker-compose.yaml ps books-details | awk '{print $1}'`; \
+$ containerName=`docker-compose -f docker/docker-compose.yaml ps books-details | grep books-details | awk '{print $1}'`; \
   docker cp $containerName:/go/torch.svg /tmp && \
   open -a /Applications/Google\ Chrome.app /tmp/torch.svg
+
 ```
 <img src="_assets/torch.svg" />
 
->常规debug信息
+> 内存(inuse_space)火焰图 *PS:用于分析程序常驻内存情况*
+```bash
+$ cd $GOPATH/src/bookinfo
+
+# 采集数据生成火焰图
+$ docker-compose -f docker/docker-compose.yaml \
+  exec books-details \
+  /go/bin/go-torch \
+  -t 30 \
+  --file "torch_mem_inuse_space.svg" \
+  -inuse_space http://localhost:5003/debug/pprof/heap \
+  --colors=mem
+
+# 获取生成的火焰图
+$ containerName=`docker-compose -f docker/docker-compose.yaml ps books-details | grep books-details | awk '{print $1}'`; \
+  docker cp $containerName:/go/torch_mem_inuse_space.svg /tmp && \
+  open -a /Applications/Google\ Chrome.app /tmp/torch_mem_inuse_space.svg
+
+```
+<img src="_assets/torch_mem_inuse_space.svg" />
+
+> 内存(alloc_space)火焰图 *PS:用于分析程临时分配内存情况*
+```bash
+$ cd $GOPATH/src/bookinfo
+
+# 采集数据生成火焰图
+$ docker-compose -f docker/docker-compose.yaml \
+  exec books-details \
+  /go/bin/go-torch \
+  -t 30 \
+  --file "torch_mem_alloc_space.svg" \
+  -alloc_space http://localhost:5003/debug/pprof/heap \
+  --colors=mem
+
+# 获取生成的火焰图
+$ containerName=`docker-compose -f docker/docker-compose.yaml ps books-details | grep books-details | awk '{print $1}'`; \
+  docker cp $containerName:/go/torch_mem_alloc_space.svg /tmp && \
+  open -a /Applications/Google\ Chrome.app /tmp/torch_mem_alloc_space.svg
+
+```
+<img src="_assets/torch_mem_alloc_space.svg" />
+
+> 常规debug信息
 ```bash
 $ open http://localhost:5003/debug/pprof/
 $ open http://localhost:5003/debug/pprof/cmdline
