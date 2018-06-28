@@ -203,7 +203,7 @@ $ containerName=`docker-compose -f docker/docker-compose.yaml ps books-details |
   open -a /Applications/Google\ Chrome.app /tmp/torch.svg
 
 ```
-<img src="_assets/torch.svg" />
+<img src="_assets/torch_cpu.svg" />
 
 > 内存(inuse_space)火焰图 *PS:用于分析程序常驻内存情况*
 ```bash
