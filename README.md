@@ -226,7 +226,7 @@ $ containerName=`docker-compose -f docker/docker-compose.yaml ps books-details |
 ```
 <img src="_assets/torch_mem_inuse_space.svg" />
 
-> 内存(alloc_space)火焰图 *PS:用于分析程临时分配内存情况*
+> 内存(alloc_space)火焰图 *PS:用于分析程序临时分配内存情况*
 ```bash
 $ cd $GOPATH/src/bookinfo
 
