@@ -1,5 +1,5 @@
-hash: f64dd68bac2167cf7f4a6925bac85ad810c9ef2f31f86441f92913934fc5eb61
-updated: 2018-06-19T21:50:04.415629+08:00
+hash: a2171f7b8508ce8e507cf47ab7016bf0790b6706a7f5e064f3c0b1d7e5013aa0
+updated: 2018-06-29T09:42:16.89358+08:00
 imports:
 - name: github.com/afex/hystrix-go
   version: fa1af6a1f4f56e0e50d427fe901cd604d8c6fb8a
@@ -15,10 +15,11 @@ imports:
   version: 346938d642f2ec3594ed81d874461961cd0faa76
   subpackages:
   - spew
+- name: github.com/divan/expvarmon
+  version: f80504d812754b431f717ff8adb084416e637739
 - name: github.com/go-kit/kit
   version: ca4112baa34cb55091301bdc13b1420a122b1b9e
   subpackages:
-  - circuitbreaker
   - endpoint
   - log
   - metrics
@@ -30,7 +31,7 @@ imports:
 - name: github.com/go-logfmt/logfmt
   version: 390ab7935ee28ec6b286364bba9b4dd6410cb3d5
 - name: github.com/go-ole/go-ole
-  version: a1ec82a652ebc7e784d7df887cfb31061aeabbcc
+  version: 7a0fa49edf48165190530c675167e2f319a05268
   subpackages:
   - oleutil
 - name: github.com/go-sql-driver/mysql
@@ -103,7 +104,7 @@ imports:
   - nfs
   - xfs
 - name: github.com/shirou/gopsutil
-  version: c23bcca55e77b8389d84b09db8c5ac2b472070ef
+  version: 4a180b209f5f494e5923cfce81ea30ba23915877
   subpackages:
   - cpu
   - host
@@ -115,24 +116,18 @@ imports:
   version: bb4de0191aa41b5507caa14b0650cdbddcd9280b
 - name: github.com/sirupsen/logrus
   version: c155da19408a8799da419ed3eeb0cb5db0ad5dbc
-- name: github.com/sony/gobreaker
-  version: e9556a45379ef1da12e54847edb2fb3d7d566f36
 - name: github.com/StackExchange/wmi
   version: cdffdb33acae0e14efff2628f9bae377b597840e
-- name: github.com/streadway/handy
-  version: f450267a206e480d863d2a92846a40f6e2896b2a
-  subpackages:
-  - breaker
 - name: github.com/tuneinc/truss
   version: 7dc4d5d85c38d1e393875bb52ec3130828f493ea
   subpackages:
   - deftree/googlethirdparty
 - name: golang.org/x/crypto
-  version: 027cca12c2d63e3d62b670d901e8a2c95854feec
+  version: a49355c7e3f8fe157a85be2f77e6e269a0f89602
   subpackages:
   - ssh/terminal
 - name: golang.org/x/net
-  version: db08ff08e8622530d9ed3a0e8ac279f6d4c02196
+  version: 97aa3a539ec716117a9d15a4659a911f50d13c3c
   subpackages:
   - context
   - http/httpguts
@@ -142,7 +137,7 @@ imports:
   - internal/timeseries
   - trace
 - name: golang.org/x/sys
-  version: f24d3d461d02f3f840cb4ff4ae1c6b3dd9f93db9
+  version: 7138fd3d9dc8335c567ca206f4333fb75eb05d56
   subpackages:
   - unix
   - windows
@@ -162,11 +157,11 @@ imports:
   subpackages:
   - cloudsql
 - name: google.golang.org/genproto
-  version: 32ee49c4dd805befd833990acba36cb75042378c
+  version: ff3583edef7de132f219f0efc00e097cabcc0ec0
   subpackages:
   - googleapis/rpc/status
 - name: google.golang.org/grpc
-  version: 7a6a684ca69eb4cae85ad0a484f2e531598c047b
+  version: 168a6198bcb0ef175f7dacec0b8691fc141dc9b8
   subpackages:
   - balancer
   - balancer/base
@@ -180,6 +175,8 @@ imports:
   - grpclb/grpc_lb_v1/messages
   - grpclog
   - internal
+  - internal/channelz
+  - internal/grpcrand
   - keepalive
   - metadata
   - naming

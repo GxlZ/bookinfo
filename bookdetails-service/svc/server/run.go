@@ -15,9 +15,16 @@ import (
 	pb "bookinfo/pb/details"
 	"bookinfo/bookdetails-service/global"
 
-	//_ "github.com/mkevac/debugcharts"
+	_ "github.com/mkevac/debugcharts"
+	_ "expvar"
+
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"expvar"
+	"runtime"
+	"time"
 )
+
+var startTime = time.Now()
 
 func NewEndpoints() svc.Endpoints {
 	// Business domain.
@@ -56,6 +63,14 @@ func Run() {
 
 	// Debug listener.
 	go func() {
+		expvar.Publish("Goroutines", expvar.Func(func() interface{}{
+			return runtime.NumGoroutine()
+		}))
+		expvar.Publish("Uptime", expvar.Func(func() interface{}{
+			uptime := time.Since(startTime)
+			return int64(uptime)
+		}))
+
 		log.Println("transport", "debug", "addr", global.Conf.DebugServer.Addr)
 
 		errc <- http.ListenAndServe(global.Conf.DebugServer.Addr, nil)

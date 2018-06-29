@@ -78,6 +78,12 @@ BookInfo 使用golang编写,实现简单的书籍查询服务。
 └── book-servername ... //其他服务,目录结构相同
 ```
 
+## 开始之前
+```bash
+
+```
+
+
 ## 生成自动化代码
 ```bash
 # *ps:生成动作会覆盖现有代码
@@ -160,6 +166,15 @@ $ open http://127.0.0.1:9411
 $ open http://localhost:5003/debug/charts/
 ```
 <img src="_assets/debug-charts.png" />
+
+> 命令行同时监控多个服务
+```bash
+$ expvarmon \
+  -i 1s \
+  -ports="127.0.0.1:5003,127.0.0.1:5013" \
+  -vars="Goroutines,mem:memstats.Alloc,mem:memstats.TotalAlloc,mem:memstats.HeapAlloc,mem:memstats.Sys,mem:memstats.HeapSys,mem:memstats.HeapObjects,mem:memstats.HeapIdle,mem:memstats.HeapInuse,memstats.NumGC,duration:memstats.PauseTotalNs,duration:Uptime"
+```
+<img src="_assets/expvarmon.png" />
 
 > pprof
 ```bash
