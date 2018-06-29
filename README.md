@@ -167,7 +167,7 @@ $ open http://localhost:5003/debug/charts/
 ```
 <img src="_assets/debug-charts.png" />
 
-> 命令行同时监控多个服务
+> 命令行同时观察多个服务
 ```bash
 $ expvarmon \
   -i 1s \
