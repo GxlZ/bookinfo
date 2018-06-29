@@ -80,7 +80,12 @@ BookInfo 使用golang编写,实现简单的书籍查询服务。
 
 ## 开始之前
 ```bash
+# docker环境需要
+$ docker version
+$ docker-compose version
 
+# 安装go命令行服务监控工具
+$ go get -v github.com/divan/expvarmon
 ```
 
 
