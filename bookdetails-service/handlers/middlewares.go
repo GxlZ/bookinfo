@@ -41,13 +41,13 @@ func WrapEndpoints(in svc.Endpoints) svc.Endpoints {
 	in.DetailEndpoint = ZipkinEndpointMiddleware()(in.DetailEndpoint)
 
 	//限频
-	in.DetailEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 10))(in.DetailEndpoint)
+	in.DetailEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 30000))(in.DetailEndpoint)
 
 	//熔断
 	hystrix.ConfigureCommand("set", hystrix.CommandConfig{
 		Timeout:               3000,
 		ErrorPercentThreshold: 10,
-		MaxConcurrentRequests: 10,
+		MaxConcurrentRequests: 1000,
 	})
 	in.DetailEndpoint = Hystrix("books-details/v1/detail")(in.DetailEndpoint)
 

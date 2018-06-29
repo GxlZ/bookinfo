@@ -11,6 +11,11 @@ services:
       - --character-set-server=utf8
       - --collation-server=utf8_bin
 
+  redis.server:
+    image: redis
+    ports:
+      - 6973:6379/tcp
+
   promethrus:
     image: prom/prometheus
     ports:
@@ -36,6 +41,7 @@ services:
       - $GOPATH/src/bookinfo:/go/src/bookinfo
     depends_on:
       - mysql.server
+      - redis.server
       - promethrus
       - zipkin
     entrypoint:
@@ -60,6 +66,7 @@ services:
       - $GOPATH/src/bookinfo:/go/src/bookinfo
     depends_on:
       - mysql.server
+      - redis.server
       - promethrus
       - zipkin
     entrypoint:

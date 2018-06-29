@@ -9,6 +9,8 @@ import (
 	zipkingo "github.com/openzipkin/zipkin-go"
 	"google.golang.org/grpc"
 	commentspb "bookinfo/pb/comments"
+	"fmt"
+	"github.com/pquerna/ffjson/ffjson"
 )
 
 // NewService returns a naïve, stateless implementation of Service.
@@ -44,8 +46,33 @@ func (s bookdetailsService) Detail(ctx context.Context, in *pb.DetailReq) (*pb.D
 		}
 	}
 
-	//base info from db
 	var resp pb.DetailResp
+
+	var redisKey = fmt.Sprintf("book_detail_%d", in.Id)
+
+	var book models.Books
+
+	//read from cache
+	{
+		cacheBytes := global.Redis.Get(redisKey).Val()
+
+		if len(cacheBytes) > 0 {
+			if err := ffjson.Unmarshal([]byte(cacheBytes), &book); err != nil {
+				global.Logger.Warnln("redis get error:", err)
+			} else {
+				resp.Code = global.SUCCESS.Code
+				resp.Msg = global.SUCCESS.Msg
+				resp.Data = &pb.DetailRespData{
+					Id:    int32(book.ID),
+					Name:  book.Name,
+					Intro: book.Intro,
+				}
+				return &resp, nil
+			}
+		}
+	}
+
+	//base info from db
 	{
 
 		if in.Id == 0 {
@@ -53,8 +80,6 @@ func (s bookdetailsService) Detail(ctx context.Context, in *pb.DetailReq) (*pb.D
 			resp.Msg = global.ERROR_PARAMS_ERROR.Msg
 			return &resp, nil
 		}
-
-		book := models.Books{}
 
 		global.BOOK_DB.WarpRawScan(newCtx, &book, "select * from books where id = ?", in.Id)
 
@@ -101,6 +126,16 @@ func (s bookdetailsService) Detail(ctx context.Context, in *pb.DetailReq) (*pb.D
 		}
 		resp.Data.Comments = commentsResp.Data
 	}
+
+	go func(book models.Books) {
+		bytes, err := ffjson.Marshal(book)
+		if err != nil {
+			global.Logger.Warnln("json marshal error:", err)
+		}
+		if err := global.Redis.Set(redisKey, bytes, 3600*time.Second).Err(); err != nil {
+			global.Logger.Warnln("redis set error:", err)
+		}
+	}(book)
 
 	return &resp, nil
 }

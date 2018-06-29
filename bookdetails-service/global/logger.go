@@ -52,6 +52,18 @@ func (this logger) InfoWithFields(fieldsFunc FieldsFunc, args ...interface{}) {
 	entry.Infoln(args...)
 }
 
+func (this logger) Warnln(args ...interface{}) {
+	this.WarnlnWithFields(func() *LogFields {
+		return NewLogFields()
+	}, args)
+}
+
+func (this logger) WarnlnWithFields(fieldsFunc FieldsFunc, args ...interface{}) {
+	entry := this.WithFields(fieldsFunc().Get())
+	entry.Data["file"] = fileInfo(3)
+	entry.Warnln(args...)
+}
+
 func (this logger) Fatal(args ...interface{}) {
 	this.FatalWithFields(func() *LogFields {
 		return NewLogFields()

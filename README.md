@@ -134,14 +134,14 @@ $ curl "http://localhost:5011/v1/get?id=1"
 ```bash
 # 满足以下规则进行熔断:
 #   异常请求超过10%
-#   并发请求超过10
+#   并发请求超过1000
 > {"code":429,"msg":"too many connections"}
 ```
 
 ## 限频
 ```bash
 # 满足以下规则进行限频率:
-#   每秒 10次请求
+#   每秒 30000次请求
 # *ps:配置规则为 N秒 M个请求
 > {"error":"rate limit exceeded"}
 ```
