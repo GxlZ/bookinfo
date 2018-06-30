@@ -72,12 +72,6 @@ func (s bookdetailsService) Detail(ctx context.Context, in *pb.DetailReq) (*pb.D
 	}
 	resp.Data.Comments = comments
 
-	go func(ctx context.Context, book models.Books) {
-		if err := global.Redis.WarpSet(ctx, redisKey, book, 3600*time.Second).Err(); err != nil {
-			global.Logger.Warnln("redis set error:", err)
-		}
-	}(newCtx, book)
-
 	return &resp, nil
 }
 
@@ -94,6 +88,12 @@ func getBookBase(ctx context.Context, in *pb.DetailReq, redisKey string) (book m
 	}
 
 	global.BOOK_DB.WarpRawScan(ctx, &book, "select * from books where id = ?", in.Id)
+
+	go func(ctx context.Context, book models.Books) {
+		if err := global.Redis.WarpSet(ctx, redisKey, book, 3600*time.Second).Err(); err != nil {
+			global.Logger.Warnln("redis set error:", err)
+		}
+	}(ctx, book)
 
 	return
 }
