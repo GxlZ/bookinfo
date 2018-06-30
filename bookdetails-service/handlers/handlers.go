@@ -50,94 +50,84 @@ func (s bookdetailsService) Detail(ctx context.Context, in *pb.DetailReq) (*pb.D
 
 	var redisKey = fmt.Sprintf("book_detail_%d", in.Id)
 
-	var book models.Books
-
-	//read from cache
-	{
-		cacheBytes := global.Redis.Get(redisKey).Val()
-
-		if len(cacheBytes) > 0 {
-			if err := ffjson.Unmarshal([]byte(cacheBytes), &book); err != nil {
-				global.Logger.Warnln("redis get error:", err)
-			} else {
-				resp.Code = global.SUCCESS.Code
-				resp.Msg = global.SUCCESS.Msg
-				resp.Data = &pb.DetailRespData{
-					Id:    int32(book.ID),
-					Name:  book.Name,
-					Intro: book.Intro,
-				}
-				return &resp, nil
-			}
-		}
+	book := getBookBase(newCtx, in, redisKey)
+	//获取基础信息异常
+	if book.ID == 0 {
+		resp.Code = global.ERROR_RESOURCE_NOT_FOUND.Code
+		resp.Msg = global.ERROR_RESOURCE_NOT_FOUND.Msg
+		return &resp, nil
 	}
 
-	//base info from db
-	{
-
-		if in.Id == 0 {
-			resp.Code = global.ERROR_PARAMS_ERROR.Code
-			resp.Msg = global.ERROR_PARAMS_ERROR.Msg
-			return &resp, nil
-		}
-
-		global.BOOK_DB.WarpRawScan(newCtx, &book, "select * from books where id = ?", in.Id)
-
-		if book.ID == 0 {
-			resp.Code = global.ERROR_RESOURCE_NOT_FOUND.Code
-			resp.Msg = global.ERROR_RESOURCE_NOT_FOUND.Msg
-			return &resp, nil
-		}
-
-		resp.Code = global.SUCCESS.Code
-		resp.Msg = global.SUCCESS.Msg
-		resp.Data = &pb.DetailRespData{
-			Id:    int32(book.ID),
-			Name:  book.Name,
-			Intro: book.Intro,
-		}
+	resp.Code = global.SUCCESS.Code
+	resp.Msg = global.SUCCESS.Msg
+	resp.Data = &pb.DetailRespData{
+		Id:    int32(book.ID),
+		Name:  book.Name,
+		Intro: book.Intro,
 	}
 
-	//comments from grpc
-	{
-		c, _ := global.NewGrpcClient(
-			newCtx,
-			zipkinSpan,
-			global.Conf.Servers.BookComments.Grpc,
-			func(ctx context.Context, conn *grpc.ClientConn) (resp interface{}, err error) {
-				c := commentspb.NewBookCommentsClient(conn)
-
-				resp, err = c.Get(ctx, &commentspb.GetReq{Id: 1})
-
-				return
-			},
-			grpc.WithInsecure(),
-			grpc.WithTimeout(10*time.Second),
-		)
-		res, err := c.Go()
-
-		if err != nil {
-			return &resp, nil
-		}
-
-		commentsResp := res.(*commentspb.GetResp)
-		if commentsResp.Code != global.SUCCESS.Code {
-			return &resp, nil
-		}
-		resp.Data.Comments = commentsResp.Data
+	comments, err := getBookComments(newCtx, in, zipkinSpan)
+	if err != nil {
+		return &resp, nil
 	}
+	resp.Data.Comments = comments
 
-	go func(book models.Books) {
-		bytes, err := ffjson.Marshal(book)
-		if err != nil {
-			global.Logger.Warnln("json marshal error:", err)
-		}
-		if err := global.Redis.Set(redisKey, bytes, 3600*time.Second).Err(); err != nil {
+	go func(ctx context.Context, book models.Books) {
+		if err := global.Redis.WarpSet(ctx, redisKey, book, 3600*time.Second).Err(); err != nil {
 			global.Logger.Warnln("redis set error:", err)
 		}
-	}(book)
+	}(newCtx, book)
 
 	return &resp, nil
+}
+
+func getBookBase(ctx context.Context, in *pb.DetailReq, redisKey string) (book models.Books) {
+	//read from cache
+	cacheBytes := global.Redis.WarpGet(ctx, redisKey).Val()
+
+	if len(cacheBytes) > 0 {
+		if err := ffjson.Unmarshal([]byte(cacheBytes), &book); err != nil {
+			global.Logger.Warnln("redis get error:", err)
+		} else {
+			return
+		}
+	}
+
+	global.BOOK_DB.WarpRawScan(ctx, &book, "select * from books where id = ?", in.Id)
+
+	return
+}
+
+func getBookComments(ctx context.Context, in *pb.DetailReq, zipkinSpan zipkingo.Span) (comments []*commentspb.Comment, err error) {
+	//comments from grpc
+	c, _ := global.NewGrpcClient(
+		ctx,
+		zipkinSpan,
+		global.Conf.Servers.BookComments.Grpc,
+		func(ctx context.Context, conn *grpc.ClientConn) (resp interface{}, err error) {
+			c := commentspb.NewBookCommentsClient(conn)
+
+			resp, err = c.Get(ctx, &commentspb.GetReq{Id: 1})
+
+			return
+		},
+		grpc.WithInsecure(),
+		grpc.WithTimeout(10*time.Second),
+	)
+	res, err := c.Go()
+
+	if err != nil {
+		global.Logger.Warnln("grpc get failed", err)
+		return
+	}
+
+	commentsResp := res.(*commentspb.GetResp)
+	if commentsResp.Code != global.SUCCESS.Code {
+		return
+	}
+
+	comments = commentsResp.Data
+	return
 }
 
 //定义中间件接口

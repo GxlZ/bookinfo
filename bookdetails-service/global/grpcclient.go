@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	zipkingo "github.com/openzipkin/zipkin-go"
 	"github.com/openzipkin/zipkin-go/propagation/b3"
+	"time"
 )
 
 func NewGrpcClient(ctx context.Context, zipkinSpan zipkingo.Span, grpcAddr string, f ProcessFunc, opts ...grpc.DialOption) (grpcClient, error) {
@@ -31,6 +32,7 @@ func NewGrpcClient(ctx context.Context, zipkinSpan zipkingo.Span, grpcAddr strin
 	c.ctx = ctx
 	c.Conn = conn
 	c.Func = f
+	c.ServiceAddr = grpcAddr
 
 	return c, nil
 }
@@ -41,10 +43,29 @@ type grpcClient struct {
 	ctx  context.Context
 	Conn *grpc.ClientConn
 	Func ProcessFunc
+	ServiceAddr string
 }
 
 func (this grpcClient) Go() (interface{}, error) {
-	defer this.Conn.Close()
+	span, _, err := zipkin(
+		"grpc",
+		this.ctx,
+		zipkinOption{
+			OptionType: ZIPKIN_OPTION_TAG,
+			zipkinTag:  ZipkinTag{"grpc to service", this.ServiceAddr},
+		},
+	)
+
+	if err == nil {
+		defer func() {
+			this.Conn.Close()
+
+			span.Annotate(time.Now(), "out grpc")
+			span.Finish()
+
+		}()
+	}
+
 	return this.Func(this.ctx, this.Conn)
 }
 

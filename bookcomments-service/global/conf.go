@@ -36,6 +36,7 @@ type zipkinConf struct {
 		Timeout       int
 		BatchSize     int `yaml:"batch_size"`
 		BatchInterval int `yaml:"batch_interval"`
+		MaxBacklog    int `yaml:"max_backlog"`
 	}
 }
 

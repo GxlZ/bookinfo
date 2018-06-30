@@ -11,13 +11,17 @@ var BOOK_DB *db
 
 var zipkinReporter reporter.Reporter
 
-func init() {
+var Redis *redisClient
 
-	loadConf()
+func init() {
 
 	Logger = newLogger()
 
+	loadConf()
+
 	BOOK_DB = newBookDB()
+
+	Redis = newRedisClient()
 
 	models.Migrate(BOOK_DB.DB)
 
