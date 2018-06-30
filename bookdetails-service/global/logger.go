@@ -117,7 +117,7 @@ func newLogger() logger {
 	}
 
 	l.Out = logFile
-	l.Out = os.Stdout
+	//l.Out = os.Stdout
 
 	return l
 }
