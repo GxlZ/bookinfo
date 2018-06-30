@@ -48,6 +48,8 @@ BookInfo 使用golang编写,实现简单的书籍查询服务。
 |   |   ├── global.go //全局变量&配置 入口
 |   |   ├── grpcclient.go //grpc客户端
 |   |   ├── logger.go //日志实例
+|   |   ├── pid.go //记录运行时服务pid
+|   |   ├── redis.go //redis相关
 |   |   └── zipkin.go //zipkin相关
 |   ├── handlers //业务逻辑目录
 |   |   ├── handlers.go //最终服务实现入口文件
