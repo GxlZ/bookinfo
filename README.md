@@ -303,9 +303,59 @@ $ docker-compose -f docker/docker-compose.yaml \
 
 goos: linux
 goarch: amd64
-BenchmarkBooksDetailsV1Detail-2   	    5000	   7844925 ns/op	  151718 B/op	     741 allocs/op
+BenchmarkBooksDetailsV1Detail-8   	   20000	   2103049 ns/op	  163115 B/op	     715 allocs/op
 PASS
-ok  	command-line-arguments	40.047s
+ok  	command-line-arguments	63.111s
+```
+
+## 压力测试 
+```bash
+$ hey -c 200 -n 50000 "http://localhost:5001/v1/detail?id=1"
+
+-----------------------------------------------------------------------------------------------
+
+  Summary:
+    Total:	1.5692 secs
+    Slowest:	0.0416 secs
+    Fastest:	0.0002 secs
+    Average:	0.0060 secs
+    Requests/sec:	31864.1087
+  
+    Total data:	2343726 bytes
+    Size/request:	46 bytes
+  
+  Response time histogram:
+    0.000 [1]	|
+    0.004 [15894]	|■■■■■■■■■■■■■■■■■■■■■■■■■
+    0.008 [25717]	|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    0.013 [6549]	|■■■■■■■■■■
+    0.017 [1442]	|■■
+    0.021 [184]	|
+    0.025 [111]	|
+    0.029 [43]	|
+    0.033 [41]	|
+    0.037 [15]	|
+    0.042 [3]	|
+  
+  
+  Latency distribution:
+    10% in 0.0028 secs
+    25% in 0.0040 secs
+    50% in 0.0053 secs
+    75% in 0.0073 secs
+    90% in 0.0099 secs
+    95% in 0.0117 secs
+    99% in 0.0161 secs
+  
+  Details (average, fastest, slowest):
+    DNS+dialup:	0.0000 secs, 0.0002 secs, 0.0416 secs
+    DNS-lookup:	0.0000 secs, 0.0000 secs, 0.0187 secs
+    req write:	0.0000 secs, 0.0000 secs, 0.0156 secs
+    resp wait:	0.0052 secs, 0.0002 secs, 0.0392 secs
+    resp read:	0.0006 secs, 0.0000 secs, 0.0309 secs
+  
+  Status code distribution:
+    [200]	50000 responses
 ```
 
 ## 服务单独启动
