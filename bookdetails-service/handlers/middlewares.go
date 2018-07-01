@@ -6,7 +6,8 @@ import (
 	"time"
 	"github.com/go-kit/kit/ratelimit"
 	"golang.org/x/time/rate"
-	"github.com/afex/hystrix-go/hystrix"
+	"github.com/go-kit/kit/circuitbreaker"
+	"github.com/sony/gobreaker"
 )
 
 // WrapEndpoints accepts the service's entire collection of endpoints, so that a
@@ -44,12 +45,12 @@ func WrapEndpoints(in svc.Endpoints) svc.Endpoints {
 	in.DetailEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 30000))(in.DetailEndpoint)
 
 	//熔断
-	hystrix.ConfigureCommand("set", hystrix.CommandConfig{
-		Timeout:               3000,
-		ErrorPercentThreshold: 10,
-		MaxConcurrentRequests: 1000,
-	})
-	in.DetailEndpoint = Hystrix("books-details/v1/detail")(in.DetailEndpoint)
+	in.DetailEndpoint = circuitbreaker.Gobreaker(
+		gobreaker.NewCircuitBreaker(gobreaker.Settings{
+			Name:        "/v1/detail",
+			MaxRequests: 50000,
+			Interval:    1 * time.Second,
+		}))(in.DetailEndpoint)
 
 	return in
 }

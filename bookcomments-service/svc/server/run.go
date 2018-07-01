@@ -65,10 +65,10 @@ func Run() {
 
 	// Debug listener.
 	go func() {
-		expvar.Publish("Goroutines", expvar.Func(func() interface{}{
+		expvar.Publish("Goroutines", expvar.Func(func() interface{} {
 			return runtime.NumGoroutine()
 		}))
-		expvar.Publish("Uptime", expvar.Func(func() interface{}{
+		expvar.Publish("Uptime", expvar.Func(func() interface{} {
 			uptime := time.Since(startTime)
 			return int64(uptime)
 		}))
@@ -82,6 +82,7 @@ func Run() {
 	go func() {
 		log.Println("transport", "HTTP", "addr", global.Conf.HttpServer.Addr)
 		h := svc.MakeHTTPHandler(endpoints)
+		h = global.HttpServerPanicHandler{h}
 		errc <- http.ListenAndServe(global.Conf.HttpServer.Addr, h)
 	}()
 
@@ -95,7 +96,7 @@ func Run() {
 		}
 
 		srv := svc.MakeGRPCServer(endpoints)
-		s := grpc.NewServer()
+		s := grpc.NewServer(global.GrpcServerPanicHandlerOptions()...)
 		pb.RegisterBookCommentsServer(s, srv)
 
 		errc <- s.Serve(ln)

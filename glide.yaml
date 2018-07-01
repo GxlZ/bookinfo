@@ -43,3 +43,7 @@ import:
 - package: github.com/go-redis/redis
   version: ^6.12.0
 - package: github.com/pquerna/ffjson
+- package: github.com/grpc-ecosystem/go-grpc-middleware
+  version: ^1.0.0
+- package: github.com/sony/gobreaker
+  version: ~0.3.0

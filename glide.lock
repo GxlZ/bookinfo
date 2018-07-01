@@ -1,5 +1,5 @@
-hash: 7814cdbd7afdf99e43cec4f2022d57e5a074af17b473bdb9b9ceec2410c41489
-updated: 2018-06-29T20:48:27.94218+08:00
+hash: 1948a74a10b4cf49f8e073282dba0549fbfa08d66d532e659e5e4c4533ac6c9b
+updated: 2018-07-01T13:18:51.60837+08:00
 imports:
 - name: github.com/afex/hystrix-go
   version: fa1af6a1f4f56e0e50d427fe901cd604d8c6fb8a
@@ -20,6 +20,7 @@ imports:
 - name: github.com/go-kit/kit
   version: ca4112baa34cb55091301bdc13b1420a122b1b9e
   subpackages:
+  - circuitbreaker
   - endpoint
   - log
   - metrics
@@ -63,6 +64,10 @@ imports:
   version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
 - name: github.com/gorilla/websocket
   version: ea4d1f681babbce9545c9c5f3d5194a789c89f5b
+- name: github.com/grpc-ecosystem/go-grpc-middleware
+  version: c250d6563d4d4c20252cd865923440e829844f4e
+  subpackages:
+  - recovery
 - name: github.com/jinzhu/gorm
   version: 6ed508ec6a4ecb3531899a69cbc746ccf65a4166
 - name: github.com/jinzhu/inflection
@@ -94,6 +99,10 @@ imports:
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/pquerna/ffjson
   version: d49c2bc1aa135aad0c6f4fc2056623ec78f5d5ac
+  subpackages:
+  - ffjson
+  - fflib/v1
+  - fflib/v1/internal
 - name: github.com/prometheus/client_golang
   version: 967789050ba94deca04a5e84cce8ad472ce313c1
   subpackages:
@@ -110,7 +119,7 @@ imports:
   - internal/bitbucket.org/ww/goautoneg
   - model
 - name: github.com/prometheus/procfs
-  version: 7d6f385de8bea29190f15ba9931442a0eaef9af7
+  version: 40f013a808ec4fa79def444a1a56de4d1727efcb
   subpackages:
   - internal/util
   - nfs
@@ -128,8 +137,14 @@ imports:
   version: bb4de0191aa41b5507caa14b0650cdbddcd9280b
 - name: github.com/sirupsen/logrus
   version: c155da19408a8799da419ed3eeb0cb5db0ad5dbc
+- name: github.com/sony/gobreaker
+  version: e9556a45379ef1da12e54847edb2fb3d7d566f36
 - name: github.com/StackExchange/wmi
   version: cdffdb33acae0e14efff2628f9bae377b597840e
+- name: github.com/streadway/handy
+  version: f450267a206e480d863d2a92846a40f6e2896b2a
+  subpackages:
+  - breaker
 - name: github.com/tuneinc/truss
   version: 7dc4d5d85c38d1e393875bb52ec3130828f493ea
   subpackages:

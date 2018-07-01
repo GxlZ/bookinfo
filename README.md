@@ -5,6 +5,7 @@ BookInfo 使用golang编写,实现简单的书籍查询服务。
 
 ###### *PS:仅供演示使用.*
 ---
+- [x] 服务崩溃恢复
 - [x] 基础代码自动生成
 - [x] 依赖库管理
 - [x] 实时编译
@@ -131,6 +132,9 @@ $ docker-compose -f docker/docker-compose.yaml \
 # http
 $ curl "http://localhost:5011/v1/get?id=1"
 ```
+
+## 崩溃恢复
+> 当服务出现panic会记录错误信息，程序不会退出。*grpc,http均支持*
 
 ## 熔断
 ```bash

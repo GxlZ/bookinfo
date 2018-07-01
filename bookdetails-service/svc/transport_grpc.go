@@ -17,6 +17,7 @@ func MakeGRPCServer(endpoints Endpoints) pb.BookDetailsServer {
 	serverOptions := []grpctransport.ServerOption{
 		grpctransport.ServerBefore(metadataToContext),
 	}
+
 	return &grpcServer{
 		// bookdetails
 
