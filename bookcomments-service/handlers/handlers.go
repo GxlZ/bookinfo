@@ -30,9 +30,6 @@ func (s bookcommentsService) Post(ctx context.Context, in *pb.PostReq) (*pb.Post
 
 // Get implements Service.
 func (s bookcommentsService) Get(ctx context.Context, in *pb.GetReq) (*pb.GetResp, error) {
-	var m map[int]int
-	m[1]=1
-
 	var resp pb.GetResp
 
 	if in.Id == 0 {
