@@ -44,6 +44,11 @@ services:
       - redis.server
       - promethrus
       - zipkin
+    links:
+      - mysql.server
+      - redis.server
+      - books-comments
+      - zipkin
     entrypoint:
       - ash
       - -c
@@ -68,6 +73,10 @@ services:
       - mysql.server
       - redis.server
       - promethrus
+      - zipkin
+    links:
+      - mysql.server
+      - redis.server
       - zipkin
     entrypoint:
       - ash
