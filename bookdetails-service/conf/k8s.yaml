@@ -34,4 +34,4 @@ metrics_server:
   addr: :5004
 servers:
   book_comments:
-    grpc: books-comments:5012
+    grpc: comments.bookinfo:5002
