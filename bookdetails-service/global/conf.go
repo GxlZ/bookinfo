@@ -74,6 +74,7 @@ var Conf conf
 const (
 	RUN_MODE_LOCAL     = "local"
 	RUN_MODE_CONTAINER = "container"
+	RUN_MODE_K8S = "k8s"
 )
 
 var ProjectRealPath = os.Getenv("GOPATH") + "/src/bookinfo/bookdetails-service"
@@ -98,6 +99,8 @@ func loadConf() {
 		confFile = ProjectRealPath + "/conf/local.yaml"
 	case RUN_MODE_CONTAINER:
 		confFile = ProjectRealPath + "/conf/container.yaml"
+	case RUN_MODE_K8S:
+		confFile = ProjectRealPath + "/conf/k8s.yaml"
 	default:
 		log.Fatalln("unsuppoer run mode! supports:[local,container]")
 	}

@@ -6,6 +6,6 @@ RUN chmod +x /entrypoint.sh && \
     cd /go/src/bookinfo/bookcomments-service/cmd/bookcomments-server && \
     go build
 
-EXPOSE 5011 5012 5013 5014
+EXPOSE 5001 5002 5003 5004
 
 ENTRYPOINT "/entrypoint.sh"
