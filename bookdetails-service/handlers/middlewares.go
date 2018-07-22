@@ -42,7 +42,10 @@ func WrapEndpoints(in svc.Endpoints) svc.Endpoints {
 	in.DetailEndpoint = ZipkinEndpointMiddleware()(in.DetailEndpoint)
 
 	//限频
-	in.DetailEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 30000))(in.DetailEndpoint)
+	in.DetailEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(
+		1000, //每秒产生的令牌数
+		10000, //令牌池最大值
+	))(in.DetailEndpoint)
 
 	//熔断
 	in.DetailEndpoint = circuitbreaker.Gobreaker(

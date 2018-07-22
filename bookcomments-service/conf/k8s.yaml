@@ -1,0 +1,34 @@
+service_name: book-comments
+db_book:
+  username: root
+  password: password
+  host: mysql.bookinfo
+  port: 3306
+  db_name: bookinfo
+  driver: mysql
+  charset: utf8
+  parse_time: True
+  local: Local
+  conn_max_life_time: 3600
+  max_idle_conns: 10
+  max_open_conns: 1000
+redis:
+  addr: "redis.bookinfo:6379"
+  password: ""
+  db: 0
+zipkin:
+  url: http://zipkin.zipkin:9411
+  service_name: book-comments
+  reporter:
+    timeout: 5
+    batch_size: 1000
+    batch_interval: 3
+    max_backlog: 10000
+http_server:
+  addr: :5001
+grpc_server:
+  addr: :5002
+debug_server:
+  addr: :5003
+metrics_server:
+  addr: :5004
