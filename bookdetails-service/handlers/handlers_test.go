@@ -39,11 +39,11 @@ func TestBooksDetailsV1Detail(t *testing.T) {
 		t.Error("books-details /v1/detail", err)
 	}
 
-	if !reflect.DeepEqual(pb.DetailResp{
-		Code: resp.Code,
-		Msg:  resp.Msg,
-		Data: resp.Data,
-	}, testData.want) {
+	if resp.Code != testData.want.Code ||
+		resp.Msg != testData.want.Msg ||
+		resp.Data.Id != testData.want.Data.Id ||
+		resp.Data.Name != testData.want.Data.Name ||
+		resp.Data.Intro != testData.want.Data.Intro{
 		t.Error(
 			"books-details /v1/detail,",
 			"req [", req, " ],",
