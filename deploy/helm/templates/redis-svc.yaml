@@ -1,0 +1,16 @@
+#配置mysql服务发现
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis
+  namespace: bookinfo
+spec:
+  ports:
+    - port: 6379
+      protocol: TCP
+      targetPort: 6379
+  selector:
+    app: bookinfo
+    type: bookinfo-nosql-redis
+  sessionAffinity: None
+  type: ClusterIP

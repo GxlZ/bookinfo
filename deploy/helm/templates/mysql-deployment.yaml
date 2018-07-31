@@ -1,0 +1,67 @@
+kind: Deployment
+apiVersion: apps/v1beta2
+metadata:
+  name: mysql
+  namespace: bookinfo
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: bookinfo
+      type: bookinfo-database-mysql
+  template:
+    metadata:
+      labels:
+        app: bookinfo
+        type: bookinfo-database-mysql
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: node-tag
+                  operator: In
+                  values:
+                    - worker-1
+      containers:
+        - name: mysql
+          image: mysql:5.6
+          args:
+            - --character-set-server=utf8
+            - --collation-server=utf8_bin
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_DATABASE
+              value: bookinfo
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "2000m"
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - name: mysql-bookinfo-vol
+              mountPath: /var/lib/mysql
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 2
+      volumes:
+        - name: mysql-bookinfo-vol
+          hostPath:
+            path: /home/mysql/bookinfo/mysql/data

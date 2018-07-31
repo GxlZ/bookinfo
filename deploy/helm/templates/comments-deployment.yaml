@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1beta2
+metadata:
+  name: comments
+  namespace: bookinfo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bookinfo-comments
+  template:
+    metadata:
+      labels:
+        app: bookinfo-comments
+    spec:
+      containers:
+        - name: comments
+          image: {{ .Values.images.comments }}
+          ports:
+           - containerPort: 5001
+             protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 5001
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /debug/pprof/symbol
+              port: 5003
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 2

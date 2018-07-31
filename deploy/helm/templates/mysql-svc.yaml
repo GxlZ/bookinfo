@@ -1,0 +1,16 @@
+#配置mysql服务发现
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql
+  namespace: bookinfo
+spec:
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+  selector:
+    app: bookinfo
+    type: bookinfo-database-mysql
+  sessionAffinity: None
+  type: ClusterIP

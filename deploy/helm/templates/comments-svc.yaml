@@ -1,0 +1,27 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: comments
+  namespace: bookinfo
+spec:
+  ports:
+    - port: 5001
+      name: http
+      protocol: TCP
+      targetPort: 5001
+    - port: 5002
+      name: grpc
+      protocol: TCP
+      targetPort: 5002
+    - port: 5003
+      name: debug
+      protocol: TCP
+      targetPort: 5003
+    - port: 5004
+      name: mertics
+      protocol: TCP
+      targetPort: 5004
+  selector:
+    app: bookinfo-comments
+  sessionAffinity: None
+  type: ClusterIP

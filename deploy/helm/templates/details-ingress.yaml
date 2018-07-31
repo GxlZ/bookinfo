@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: details-service-ingress
+  namespace: bookinfo
+  annotations:
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - host: details-service.bookinfo.47.52.26.27.xip.io
+    http:
+      paths:
+      - backend:
+          serviceName: details
+          servicePort: 5001
+        path: /http
+      - backend:
+          serviceName: details
+          servicePort: 5002
+        path: /grpc
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: details-debug-ingress
+  namespace: bookinfo
+spec:
+  rules:
+  - host: details-debug.bookinfo.47.52.26.27.xip.io
+    http:
+      paths:
+      - backend:
+          serviceName: details
+          servicePort: 5003
+        path: /debug

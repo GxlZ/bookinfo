@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: comments-service-ingress
+  namespace: bookinfo
+  annotations:
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - host: comments-service.bookinfo.47.52.26.27.xip.io
+    http:
+      paths:
+      - backend:
+          serviceName: comments
+          servicePort: 5001
+        path: /http
+      - backend:
+          serviceName: comments
+          servicePort: 5002
+        path: /grpc
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: comments-debug-ingress
+  namespace: bookinfo
+spec:
+  rules:
+  - host: comments-debug.bookinfo.47.52.26.27.xip.io
+    http:
+      paths:
+      - backend:
+          serviceName: comments
+          servicePort: 5003
+        path: /debug
