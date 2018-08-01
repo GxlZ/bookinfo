@@ -273,6 +273,11 @@
 			"Rev": "816c9085562cd7ee03e7f8188a1cfd942858cded"
 		},
 		{
+			"ImportPath": "github.com/pmezard/go-difflib/difflib",
+			"Comment": "v1.0.0",
+			"Rev": "792786c7400a136282c1664665ae0a8db921c6c2"
+		},
+		{
 			"ImportPath": "github.com/pquerna/ffjson/ffjson",
 			"Rev": "af8b230fcd2007c7095168ca8ab94c68b60840c6"
 		},
@@ -439,6 +444,21 @@
 		{
 			"ImportPath": "github.com/streadway/handy/breaker",
 			"Rev": "f450267a206e480d863d2a92846a40f6e2896b2a"
+		},
+		{
+			"ImportPath": "github.com/stretchr/objx",
+			"Comment": "v0.1.1-26-gb8b73a3",
+			"Rev": "b8b73a35e9830ae509858c10dec5866b4d5c8bff"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/assert",
+			"Comment": "v1.2.2",
+			"Rev": "f35b8ab0b5a2cef36673838d662e249dd9c94686"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/mock",
+			"Comment": "v1.2.2",
+			"Rev": "f35b8ab0b5a2cef36673838d662e249dd9c94686"
 		},
 		{
 			"ImportPath": "github.com/tuneinc/truss/deftree/googlethirdparty",
