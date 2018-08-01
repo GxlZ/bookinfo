@@ -3,6 +3,7 @@
 	"GoVersion": "go1.10",
 	"GodepVersion": "v80",
 	"Packages": [
+		"github.com/smartystreets/goconvey",
 		"./..."
 	],
 	"Deps": [
@@ -173,6 +174,10 @@
 			"Rev": "f5983d50c82d70eaa88c17080245cc871558081f"
 		},
 		{
+			"ImportPath": "github.com/gopherjs/gopherjs/js",
+			"Rev": "0892b62f0d9fb5857760c3cfca837207185117ee"
+		},
+		{
 			"ImportPath": "github.com/gorilla/mux",
 			"Comment": "v1.6.2-3-gcb46983",
 			"Rev": "cb4698366aa625048f3b815af6a0dea8aef9280a"
@@ -205,6 +210,11 @@
 			"ImportPath": "github.com/joho/godotenv",
 			"Comment": "v1.2.0-12-g1709ab1",
 			"Rev": "1709ab122c988931ad53508747b3c061400c2984"
+		},
+		{
+			"ImportPath": "github.com/jtolds/gls",
+			"Comment": "v4.2.1",
+			"Rev": "77f18212c9c7edc9bd6a33d383a7b545ce62f064"
 		},
 		{
 			"ImportPath": "github.com/kr/logfmt",
@@ -381,6 +391,56 @@
 			"ImportPath": "github.com/smartystreets/assertions/internal/unit",
 			"Comment": "1.8.3-13-ge900ae0",
 			"Rev": "e900ae048470ba3ce0440bc5ba1baf2bd87a9a1d"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/convey/gotest",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/convey/reporting",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/api",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/contract",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/executor",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/messaging",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/parser",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/system",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/watch",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
 		},
 		{
 			"ImportPath": "github.com/sony/gobreaker",
