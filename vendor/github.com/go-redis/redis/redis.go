@@ -176,9 +176,8 @@ func (c *baseClient) retryBackoff(attempt int) time.Duration {
 
 func (c *baseClient) cmdTimeout(cmd Cmder) time.Duration {
 	if timeout := cmd.readTimeout(); timeout != nil {
-		return *timeout
+		return readTimeout(*timeout)
 	}
-
 	return c.opt.ReadTimeout
 }
 
@@ -424,7 +423,7 @@ func (c *Client) TxPipeline() Pipeliner {
 }
 
 func (c *Client) pubSub() *PubSub {
-	return &PubSub{
+	pubsub := &PubSub{
 		opt: c.opt,
 
 		newConn: func(channels []string) (*pool.Conn, error) {
@@ -432,6 +431,8 @@ func (c *Client) pubSub() *PubSub {
 		},
 		closeConn: c.connPool.CloseConn,
 	}
+	pubsub.init()
+	return pubsub
 }
 
 // Subscribe subscribes the client to the specified channels.

@@ -62,6 +62,7 @@ type Cmdable interface {
 	TxPipelined(fn func(Pipeliner) error) ([]Cmder, error)
 	TxPipeline() Pipeliner
 
+	Command() *CommandsInfoCmd
 	ClientGetName() *StringCmd
 	Echo(message interface{}) *StringCmd
 	Ping() *StatusCmd
@@ -171,6 +172,16 @@ type Cmdable interface {
 	SRem(key string, members ...interface{}) *IntCmd
 	SUnion(keys ...string) *StringSliceCmd
 	SUnionStore(destination string, keys ...string) *IntCmd
+	XAdd(stream, id string, els map[string]interface{}) *StringCmd
+	XAddExt(opt *XAddExt) *StringCmd
+	XLen(key string) *IntCmd
+	XRange(stream, start, stop string) *XMessageSliceCmd
+	XRangeN(stream, start, stop string, count int64) *XMessageSliceCmd
+	XRevRange(stream string, start, stop string) *XMessageSliceCmd
+	XRevRangeN(stream string, start, stop string, count int64) *XMessageSliceCmd
+	XRead(streams ...string) *XStreamSliceCmd
+	XReadN(count int64, streams ...string) *XStreamSliceCmd
+	XReadExt(opt *XReadExt) *XStreamSliceCmd
 	ZAdd(key string, members ...Z) *IntCmd
 	ZAddNX(key string, members ...Z) *IntCmd
 	ZAddXX(key string, members ...Z) *IntCmd
@@ -209,6 +220,7 @@ type Cmdable interface {
 	BgRewriteAOF() *StatusCmd
 	BgSave() *StatusCmd
 	ClientKill(ipPort string) *StatusCmd
+	ClientKillByFilter(keys ...string) *IntCmd
 	ClientList() *StringCmd
 	ClientPause(dur time.Duration) *BoolCmd
 	ConfigGet(parameter string) *SliceCmd
@@ -265,9 +277,9 @@ type Cmdable interface {
 	GeoRadiusByMemberRO(key, member string, query *GeoRadiusQuery) *GeoLocationCmd
 	GeoDist(key string, member1, member2, unit string) *FloatCmd
 	GeoHash(key string, members ...string) *StringSliceCmd
-	Command() *CommandsInfoCmd
 	ReadOnly() *StatusCmd
 	ReadWrite() *StatusCmd
+	MemoryUsage(key string, samples ...int) *IntCmd
 }
 
 type StatefulCmdable interface {
@@ -345,6 +357,12 @@ func (c *statefulCmdable) SwapDB(index1, index2 int) *StatusCmd {
 
 //------------------------------------------------------------------------------
 
+func (c *cmdable) Command() *CommandsInfoCmd {
+	cmd := NewCommandsInfoCmd("command")
+	c.process(cmd)
+	return cmd
+}
+
 func (c *cmdable) Del(keys ...string) *IntCmd {
 	args := make([]interface{}, 1+len(keys))
 	args[0] = "del"
@@ -411,7 +429,7 @@ func (c *cmdable) Migrate(host, port, key string, db int64, timeout time.Duratio
 		db,
 		formatMs(timeout),
 	)
-	cmd.setReadTimeout(readTimeout(timeout))
+	cmd.setReadTimeout(timeout)
 	c.process(cmd)
 	return cmd
 }
@@ -985,7 +1003,7 @@ func (c *cmdable) BLPop(timeout time.Duration, keys ...string) *StringSliceCmd {
 	}
 	args[len(args)-1] = formatSec(timeout)
 	cmd := NewStringSliceCmd(args...)
-	cmd.setReadTimeout(readTimeout(timeout))
+	cmd.setReadTimeout(timeout)
 	c.process(cmd)
 	return cmd
 }
@@ -998,7 +1016,7 @@ func (c *cmdable) BRPop(timeout time.Duration, keys ...string) *StringSliceCmd {
 	}
 	args[len(keys)+1] = formatSec(timeout)
 	cmd := NewStringSliceCmd(args...)
-	cmd.setReadTimeout(readTimeout(timeout))
+	cmd.setReadTimeout(timeout)
 	c.process(cmd)
 	return cmd
 }
@@ -1010,7 +1028,7 @@ func (c *cmdable) BRPopLPush(source, destination string, timeout time.Duration) 
 		destination,
 		formatSec(timeout),
 	)
-	cmd.setReadTimeout(readTimeout(timeout))
+	cmd.setReadTimeout(timeout)
 	c.process(cmd)
 	return cmd
 }
@@ -1278,6 +1296,129 @@ func (c *cmdable) SUnionStore(destination string, keys ...string) *IntCmd {
 	cmd := NewIntCmd(args...)
 	c.process(cmd)
 	return cmd
+}
+
+//------------------------------------------------------------------------------
+
+type XAddExt struct {
+	Stream       string
+	MaxLen       int64 // MAXLEN N
+	MaxLenApprox int64 // MAXLEN ~ N
+	ID           string
+	Values       map[string]interface{}
+}
+
+func (c *cmdable) XAddExt(opt *XAddExt) *StringCmd {
+	a := make([]interface{}, 0, 6+len(opt.Values)*2)
+	a = append(a, "xadd")
+	a = append(a, opt.Stream)
+	if opt.MaxLen > 0 {
+		a = append(a, "maxlen", opt.MaxLen)
+	} else if opt.MaxLenApprox > 0 {
+		a = append(a, "maxlen", "~", opt.MaxLenApprox)
+	}
+	if opt.ID != "" {
+		a = append(a, opt.ID)
+	} else {
+		a = append(a, "*")
+	}
+	for k, v := range opt.Values {
+		a = append(a, k)
+		a = append(a, v)
+	}
+
+	cmd := NewStringCmd(a...)
+	c.process(cmd)
+	return cmd
+}
+
+func (c *cmdable) XAdd(stream, id string, values map[string]interface{}) *StringCmd {
+	return c.XAddExt(&XAddExt{
+		Stream: stream,
+		ID:     id,
+		Values: values,
+	})
+}
+
+func (c *cmdable) XLen(key string) *IntCmd {
+	cmd := NewIntCmd("xlen", key)
+	c.process(cmd)
+	return cmd
+}
+
+func (c *cmdable) XRange(stream, start, stop string) *XMessageSliceCmd {
+	cmd := NewXMessageSliceCmd("xrange", stream, start, stop)
+	c.process(cmd)
+	return cmd
+}
+
+func (c *cmdable) XRangeN(stream, start, stop string, count int64) *XMessageSliceCmd {
+	cmd := NewXMessageSliceCmd("xrange", stream, start, stop, "count", count)
+	c.process(cmd)
+	return cmd
+}
+
+func (c *cmdable) XRevRange(stream, start, stop string) *XMessageSliceCmd {
+	cmd := NewXMessageSliceCmd("xrevrange", stream, start, stop)
+	c.process(cmd)
+	return cmd
+}
+
+func (c *cmdable) XRevRangeN(stream, start, stop string, count int64) *XMessageSliceCmd {
+	cmd := NewXMessageSliceCmd("xrevrange", stream, start, stop, "count", count)
+	c.process(cmd)
+	return cmd
+}
+
+type XReadExt struct {
+	Streams []string
+	Count   int64
+	Block   time.Duration
+}
+
+func (c *cmdable) XReadExt(opt *XReadExt) *XStreamSliceCmd {
+	a := make([]interface{}, 0, 5+len(opt.Streams))
+	a = append(a, "xread")
+	if opt != nil {
+		if opt.Count > 0 {
+			a = append(a, "count")
+			a = append(a, opt.Count)
+		}
+		if opt.Block >= 0 {
+			a = append(a, "block")
+			a = append(a, int64(opt.Block/time.Millisecond))
+		}
+	}
+	a = append(a, "streams")
+	for _, s := range opt.Streams {
+		a = append(a, s)
+	}
+
+	cmd := NewXStreamSliceCmd(a...)
+	c.process(cmd)
+	return cmd
+}
+
+func (c *cmdable) XRead(streams ...string) *XStreamSliceCmd {
+	return c.XReadExt(&XReadExt{
+		Streams: streams,
+		Block:   -1,
+	})
+}
+
+func (c *cmdable) XReadN(count int64, streams ...string) *XStreamSliceCmd {
+	return c.XReadExt(&XReadExt{
+		Streams: streams,
+		Count:   count,
+		Block:   -1,
+	})
+}
+
+func (c *cmdable) XReadBlock(block time.Duration, streams ...string) *XStreamSliceCmd {
+	return c.XReadExt(&XReadExt{
+		Streams: streams,
+		Block:   block,
+	})
 }
 
 //------------------------------------------------------------------------------
@@ -1678,6 +1819,20 @@ func (c *cmdable) BgSave() *StatusCmd {
 
 func (c *cmdable) ClientKill(ipPort string) *StatusCmd {
 	cmd := NewStatusCmd("client", "kill", ipPort)
+	c.process(cmd)
+	return cmd
+}
+
+// ClientKillByFilter is new style synx, while the ClientKill is old
+// CLIENT KILL <option> [value] ... <option> [value]
+func (c *cmdable) ClientKillByFilter(keys ...string) *IntCmd {
+	args := make([]interface{}, 2+len(keys))
+	args[0] = "client"
+	args[1] = "kill"
+	for i, key := range keys {
+		args[2+i] = key
+	}
+	cmd := NewIntCmd(args...)
 	c.process(cmd)
 	return cmd
 }
@@ -2168,8 +2323,15 @@ func (c *cmdable) GeoPos(key string, members ...string) *GeoPosCmd {
 
 //------------------------------------------------------------------------------
 
-func (c *cmdable) Command() *CommandsInfoCmd {
-	cmd := NewCommandsInfoCmd("command")
+func (c *cmdable) MemoryUsage(key string, samples ...int) *IntCmd {
+	args := []interface{}{"memory", "usage", key}
+	if len(samples) > 0 {
+		if len(samples) != 1 {
+			panic("MemoryUsage expects single sample count")
+		}
+		args = append(args, "SAMPLES", samples[0])
+	}
+	cmd := NewIntCmd(args...)
 	c.process(cmd)
 	return cmd
 }
