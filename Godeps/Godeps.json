@@ -173,6 +173,10 @@
 			"Rev": "f5983d50c82d70eaa88c17080245cc871558081f"
 		},
 		{
+			"ImportPath": "github.com/gopherjs/gopherjs/js",
+			"Rev": "0892b62f0d9fb5857760c3cfca837207185117ee"
+		},
+		{
 			"ImportPath": "github.com/gorilla/mux",
 			"Comment": "v1.6.2-3-gcb46983",
 			"Rev": "cb4698366aa625048f3b815af6a0dea8aef9280a"
@@ -205,6 +209,11 @@
 			"ImportPath": "github.com/joho/godotenv",
 			"Comment": "v1.2.0-12-g1709ab1",
 			"Rev": "1709ab122c988931ad53508747b3c061400c2984"
+		},
+		{
+			"ImportPath": "github.com/jtolds/gls",
+			"Comment": "v4.2.1",
+			"Rev": "77f18212c9c7edc9bd6a33d383a7b545ce62f064"
 		},
 		{
 			"ImportPath": "github.com/kr/logfmt",
@@ -262,11 +271,6 @@
 			"ImportPath": "github.com/pkg/errors",
 			"Comment": "v0.8.0-12-g816c908",
 			"Rev": "816c9085562cd7ee03e7f8188a1cfd942858cded"
-		},
-		{
-			"ImportPath": "github.com/pmezard/go-difflib/difflib",
-			"Comment": "v1.0.0",
-			"Rev": "792786c7400a136282c1664665ae0a8db921c6c2"
 		},
 		{
 			"ImportPath": "github.com/pquerna/ffjson/ffjson",
@@ -363,6 +367,71 @@
 			"Rev": "d329d24db4313262a3b0a24d8aeb1dc4bd294fb0"
 		},
 		{
+			"ImportPath": "github.com/smartystreets/assertions",
+			"Comment": "1.8.3-13-ge900ae0",
+			"Rev": "e900ae048470ba3ce0440bc5ba1baf2bd87a9a1d"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/assertions/internal/go-render/render",
+			"Comment": "1.8.3-13-ge900ae0",
+			"Rev": "e900ae048470ba3ce0440bc5ba1baf2bd87a9a1d"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/assertions/internal/oglematchers",
+			"Comment": "1.8.3-13-ge900ae0",
+			"Rev": "e900ae048470ba3ce0440bc5ba1baf2bd87a9a1d"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/convey/gotest",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/convey/reporting",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/api",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/contract",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/executor",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/messaging",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/parser",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/system",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/watch",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
 			"ImportPath": "github.com/sony/gobreaker",
 			"Comment": "0.3.0-4-g3cb67c7",
 			"Rev": "3cb67c77c1d1e72fda30c6970578164d24f806b6"
@@ -370,31 +439,6 @@
 		{
 			"ImportPath": "github.com/streadway/handy/breaker",
 			"Rev": "f450267a206e480d863d2a92846a40f6e2896b2a"
-		},
-		{
-			"ImportPath": "github.com/stretchr/objx",
-			"Comment": "v0.1.1-26-gb8b73a3",
-			"Rev": "b8b73a35e9830ae509858c10dec5866b4d5c8bff"
-		},
-		{
-			"ImportPath": "github.com/stretchr/testify",
-			"Comment": "v1.2.2",
-			"Rev": "f35b8ab0b5a2cef36673838d662e249dd9c94686"
-		},
-		{
-			"ImportPath": "github.com/stretchr/testify/assert",
-			"Comment": "v1.2.2",
-			"Rev": "f35b8ab0b5a2cef36673838d662e249dd9c94686"
-		},
-		{
-			"ImportPath": "github.com/stretchr/testify/http",
-			"Comment": "v1.2.2",
-			"Rev": "f35b8ab0b5a2cef36673838d662e249dd9c94686"
-		},
-		{
-			"ImportPath": "github.com/stretchr/testify/mock",
-			"Comment": "v1.2.2",
-			"Rev": "f35b8ab0b5a2cef36673838d662e249dd9c94686"
 		},
 		{
 			"ImportPath": "github.com/tuneinc/truss/deftree/googlethirdparty",
