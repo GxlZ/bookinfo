@@ -3,7 +3,7 @@
 	"GoVersion": "go1.10",
 	"GodepVersion": "v80",
 	"Packages": [
-		"github.com/smartystreets/goconvey",
+		"github.com/smartystreets/goconvey/...",
 		"./..."
 	],
 	"Deps": [
@@ -398,12 +398,22 @@
 			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
 		},
 		{
+			"ImportPath": "github.com/smartystreets/goconvey/convey",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
 			"ImportPath": "github.com/smartystreets/goconvey/convey/gotest",
 			"Comment": "1.6.3-17-gef6db91",
 			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
 		},
 		{
 			"ImportPath": "github.com/smartystreets/goconvey/convey/reporting",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/examples",
 			"Comment": "1.6.3-17-gef6db91",
 			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
 		},
@@ -439,6 +449,16 @@
 		},
 		{
 			"ImportPath": "github.com/smartystreets/goconvey/web/server/watch",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/watch/integration_testing",
+			"Comment": "1.6.3-17-gef6db91",
+			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/web/server/watch/integration_testing/sub",
 			"Comment": "1.6.3-17-gef6db91",
 			"Rev": "ef6db91d284a0e7badaa1f0c404c30aa7dee3aed"
 		},
