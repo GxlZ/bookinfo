@@ -3,7 +3,6 @@ package global
 import (
 	"io/ioutil"
 	"gopkg.in/yaml.v2"
-	"log"
 	"os"
 	"github.com/joho/godotenv"
 	"github.com/davecgh/go-spew/spew"
@@ -66,7 +65,7 @@ var Conf conf
 const (
 	RUN_MODE_LOCAL     = "local"
 	RUN_MODE_CONTAINER = "container"
-	RUN_MODE_K8S = "k8s"
+	RUN_MODE_K8S       = "k8s"
 )
 
 var ProjectRealPath = os.Getenv("GOPATH") + "/src/bookinfo/bookcomments-service"
@@ -77,13 +76,13 @@ func loadConf() {
 
 	os.MkdirAll(LogPath, os.ModePerm)
 
-	log.Println(ProjectRealPath)
+	Logger.Infoln(ProjectRealPath)
 	if err := godotenv.Load(ProjectRealPath + "/.env"); err != nil {
-		log.Fatal("Error loading .env file")
+		Logger.Fatalln("Error loading .env file")
 	}
 
 	runMode := os.Getenv("RUN_MODE")
-	log.Println("run mode:", runMode)
+	Logger.Infoln("run mode:", runMode)
 
 	var confFile string
 	switch runMode {
@@ -94,13 +93,13 @@ func loadConf() {
 	case RUN_MODE_K8S:
 		confFile = ProjectRealPath + "/conf/k8s.yaml"
 	default:
-		log.Fatalln("unsuppoer run mode! supports:[local,container,k8s]")
+		Logger.Fatalln("unsuppoer run mode! supports:[local,container,k8s]")
 	}
 
 	conf, _ := ioutil.ReadFile(confFile)
 	if err := yaml.Unmarshal(conf, &Conf); err != nil {
-		log.Fatalln("conf load failed", err)
+		Logger.Fatalln("conf load failed", err)
 	}
 
-	spew.Dump(Conf)
+	Logger.Infoln(spew.Sdump(Conf))
 }

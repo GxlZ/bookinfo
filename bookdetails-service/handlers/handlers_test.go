@@ -6,29 +6,26 @@ import (
 	"bookinfo/pb/comments"
 	"context"
 	"github.com/stretchr/testify/mock"
-	"github.com/davecgh/go-spew/spew"
+	. "github.com/smartystreets/goconvey/convey"
+	"fmt"
 )
 
 type MockBooksDetailsServer struct {
 	mock.Mock
 }
 
-func (this MockBooksDetailsServer) Detail(ctx context.Context,req *pb.DetailReq) (*pb.DetailResp, error) {
+func (this MockBooksDetailsServer) Detail(ctx context.Context, req *pb.DetailReq) (*pb.DetailResp, error) {
 	args := this.Mock.Called(ctx, req)
-	spew.Dump(args)
 	return args.Get(0).(*pb.DetailResp), args.Error(1)
 }
 
-var booksDetailsServer = NewService()
-
 func TestBooksDetailsV1Detail(t *testing.T) {
-
 	mockBooksDetailsServer := MockBooksDetailsServer{}
 	mockBooksDetailsServer.On(
 		"Detail",
-		nil,
+		context.Background(),
 		&pb.DetailReq{Id: 1},
-	).Return(pb.DetailResp{
+	).Return(&pb.DetailResp{
 		Code: 200,
 		Msg:  "success",
 		Data: &pb.DetailRespData{
@@ -45,10 +42,10 @@ func TestBooksDetailsV1Detail(t *testing.T) {
 
 	testData := struct {
 		in   int64
-		want pb.DetailResp
+		want *pb.DetailResp
 	}{
 		in: 1,
-		want: pb.DetailResp{
+		want: &pb.DetailResp{
 			Code: 200,
 			Msg:  "success",
 			Data: &pb.DetailRespData{
@@ -64,33 +61,21 @@ func TestBooksDetailsV1Detail(t *testing.T) {
 		},
 	}
 
+	Convey(fmt.Sprintf("测试 svc Detail方法,入参: [*pb.DetailReq, id:%d]", testData.in), t, func() {
+		req := &pb.DetailReq{Id: testData.in}
+		resp, _ := mockBooksDetailsServer.Detail(context.Background(), req)
 
-	req := &pb.DetailReq{Id: testData.in}
-	resp, err := mockBooksDetailsServer.Detail(context.Background(), req)
-
-
-	if err != nil {
-		t.Error("books-details /v1/detail", err)
-	}
-
-	if resp.Code != testData.want.Code ||
-		resp.Msg != testData.want.Msg ||
-		resp.Data.Id != testData.want.Data.Id ||
-		resp.Data.Name != testData.want.Data.Name ||
-		resp.Data.Intro != testData.want.Data.Intro {
-		t.Error(
-			"books-details /v1/detail,",
-			"req [", req, " ],",
-			"resp [", resp, " ],",
-			"want resp [", testData.want, " ]",
-		)
-	}
+		Convey("返回结果判断", func() {
+			So(resp, ShouldResemble, testData.want)
+		})
+	})
 }
 
 func BenchmarkBooksDetailsV1Detail(b *testing.B) {
-	b.ResetTimer()
-	req := &pb.DetailReq{Id: 1}
-	for i := 0; i < b.N; i++ {
-		booksDetailsServer.Detail(context.Background(), req)
-	}
+	//b.ResetTimer()
+	//req := &pb.DetailReq{Id: 1}
+	//mockBooksDetailsServer := MockBooksDetailsServer{}
+	//for i := 0; i < b.N; i++ {
+	//	mockBooksDetailsServer.Detail(nil, req)
+	//}
 }
